@@ -25,9 +25,8 @@
 }
 
 .header {
+  display: block;
   margin-bottom: 25px;
-  line-height: 50px;
-  height: 50px;
   border-bottom: 1px solid #ddd;
   padding: 25px 0;
 }
@@ -38,4 +37,11 @@
   line-height: 30px;
   border-top: 1px solid #ddd;
   margin-top: 25px;
+}
+
+#calendar {
+  display: block;
+  margin: 0 auto;
+  width: 800px;
+  height: 500px;
 }
