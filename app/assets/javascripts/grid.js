@@ -7,10 +7,14 @@ function Grid(xSize, ySize) {
   this.tiles = [];
   for(var i = 0; i < xSize; i++) {
     this.tiles[i] = [];
-    for(var j = 0; j < ySize; j++) {
-      this.generateTile({x: i, y: j}, 0);
-    }
   }
+};
+
+/*
+  Initializes the grid with two tiles.
+*/
+Grid.prototype.init = function() {
+  // TODO: implement initial calendar
 };
 
 /*
@@ -56,13 +60,6 @@ Grid.prototype.updateTileLevel = function(tile, newLevel) {
   if(tile)
     tile.level = newLevel;
 }
-
-/*
-  Initializes the grid with two tiles.
-*/
-Grid.prototype.init = function() {
-  // TODO: implement initial calendar
-};
 
 Grid.prototype.isOutOfBounds = function(pos) {
   return (pos.x >= this.xSize || pos.y >= this.ySize || pos.x < 0 || pos.y < 0);
