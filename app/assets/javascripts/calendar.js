@@ -1,5 +1,6 @@
-function Calendar() {
-  globalCalendar = this;
+function Calendar(debugMode) {
+  if(debugMode == true)
+    debug = this;
   this.grid = new Grid(52, 7);
   this.graphicsManager = new GraphicsManager(this.grid);
   this.grid.init();

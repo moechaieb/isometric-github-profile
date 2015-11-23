@@ -10,102 +10,111 @@ var Shape = Isomer.Shape;
 var Color = Isomer.Color;
 
 /*
-  Important constants.
-  For animations to work, the following must be an integer: refreshRate * (squareSide + space)
-*/
-var squareSide = 0.7;
-var thickness = 0.1;
-var refreshRate = 4;
-var elevation = 3;
-var space = 0.3;
-var initTranslate = 12;
-var center = Point(
-  2 * squareSide + 2.5 * space - initTranslate, 
-  2 * squareSide + 2.5 * space + initTranslate, 
-  0
-);
-
-var boardcolors = [
-  new Color(64, 64, 64),
-  new Color( 0,  0,  0)
-];
-
-var progression = [
-  new Color(230, 230, 230),
-  new Color(220, 180, 160),
-  new Color(210, 120, 110),
-  new Color(255,  70,  70),
-  new Color(255,   0,   0),
-  new Color(255, 255, 150),
-  new Color(255, 230, 110),
-  new Color(255, 210,  50),
-  new Color(255, 195,  15),
-  new Color(230, 150,  60),
-  new Color(230, 110,  25)
-];
-
-/*
-  Constucts a GraphicsManager object, wrapping an Isomer object
+  Constucts a GraphicsManager object, wrapping an Isomer instance
 */
 function GraphicsManager(grid) {
   this.iso = new Isomer(document.getElementById('calendar'));
-  this.iso.scale = 25;
-  this.dt = 0;
-  this.tile3Ds = [];
-  this.refreshCounter = 1;
-  this.angle = 0;
   this.grid = grid;
-  this.xSize = grid.xSize;
-  this.ySize = grid.ySize;
+
+  this.config = {
+    scale : 25,
+    translation : { 
+      x : -12, 
+      y : 12, 
+      z : 0 
+    },
+    boardColors : [ 
+      new Color(64, 64, 64), 
+      new Color( 0,  0,  0) 
+    ],
+    colorProgression : [
+      new Color(230, 230, 230)
+    ]
+  }
+  
+  this.animation = {
+    refreshRate : 4,
+    refreshCounter : 0,
+    angle : 0,
+    dTheta : 0,
+  }
+  
+  this.dimensions = {
+    x : grid.xSize,
+    y : grid.ySize,
+    squareSide : 0.7,
+    space : 0.3,
+    thickness : 0.1
+  }
+
+  this.iso.scale = this.config.scale;
+};
+
+/*
+  Draws the tile at the correct location (takes into account rotation angle)
+*/
+GraphicsManager.prototype.add = function(shape, color) {
+  var config = this.config;
+  return this.iso.add(
+    shape.rotateZ(
+      this.getSceneCenter(),
+      this.animation.angle
+    ).translate(
+      config.translation.x,
+      config.translation.y,
+      config.translation.z
+    ), 
+    color
+  );
 };
 
 /*
   Draws the board on which the tiles will move.
 */
 GraphicsManager.prototype.drawBoard = function() {
-  //add board
+  var dim = this.dimensions;
+  var config = this.config;
+  // Draw the board
   this.add(
     Shape.Prism(
       Point(
-        -thickness - initTranslate,
-        -thickness + initTranslate,
+        -dim.thickness,
+        -dim.thickness,
         0
       ), 
-      this.xSize * squareSide + (this.xSize + 1) * space, 
-      this.ySize * squareSide + (this.ySize + 1) * space, 
-      thickness
-    ), 
-    null, 
-    boardcolors[1]
+      dim.x * dim.squareSide + (dim.x + 1) * dim.space, 
+      dim.y * dim.squareSide + (dim.y + 1) * dim.space, 
+      dim.thickness
+    ),
+    config.boardColors[1]
   );
-  //initialize the squares
-  for (var i = this.xSize - 1; i >= 0; i--) {
-    for (var j = this.ySize - 1; j >= 0; j--) {
+  // Draw the tiles
+  for (var i = dim.x - 1; i >= 0; i--) {
+    for (var j = dim.y - 1; j >= 0; j--) {
       this.add(
         new Path([
           Point(
-            i * (squareSide + space) + space - initTranslate, 
-            j * (squareSide + space) + space + initTranslate, 
+            i * (dim.squareSide + dim.space) + dim.space, 
+            j * (dim.squareSide + dim.space) + dim.space, 
             0
           ), 
           Point(
-            i * (squareSide + space) + space + squareSide - initTranslate,
-            j * (space + squareSide) + space + initTranslate, 
+            i * (dim.squareSide + dim.space) + dim.space + dim.squareSide,
+            j * (dim.space + dim.squareSide) + dim.space, 
             0
           ),
           Point(
-            i * (squareSide + space) + space + squareSide - initTranslate, 
-            j * (space + squareSide) + space + squareSide + initTranslate, 
+            i * (dim.squareSide + dim.space) + dim.space + dim.squareSide, 
+            j * (dim.space + dim.squareSide) + dim.space + dim.squareSide, 
             0
           ),
           Point(
-            i * (squareSide + space) + space - initTranslate, 
-            j * (space + squareSide) + squareSide + space + initTranslate, 
+            i * (dim.squareSide + dim.space) + dim.space, 
+            j * (dim.space + dim.squareSide) + dim.squareSide + dim.space, 
             0
           )
-        ]), 
-        null, 
-        boardcolors[0]
+        ]),
+        config.boardColors[0]
       );
     };
   };
@@ -115,14 +124,16 @@ GraphicsManager.prototype.drawBoard = function() {
   Contructs a 3D tile representation of a tile object.
 */
 GraphicsManager.prototype.makeTile3D = function(tile) {
+  var dim = this.dimensions;
+  var config = this.config;
   return Shape.Prism(
     Point(
-      tile.x * (squareSide + space) + space - initTranslate,
-      tile.y * (squareSide + space) + space + initTranslate
+      tile.x * (dim.squareSide + dim.space) + dim.space,
+      tile.y * (dim.squareSide + dim.space) + dim.space
     ),
-    squareSide, 
-    squareSide, 
-    Math.pow(2, tile.level) * thickness
+    dim.squareSide, 
+    dim.squareSide, 
+    Math.pow(2, tile.level) * dim.thickness
   );
 };
 
@@ -135,7 +146,7 @@ GraphicsManager.prototype.drawTiles = function() {
   this.drawBoard();
   this.grid.eachCell(null, function(x,y,tile) {
     if(tile)
-      self.add(self.makeTile3D(tile), null, progression[tile.level]);
+      self.add(self.makeTile3D(tile), self.config.colorProgression[tile.level]);
   });
 };
 
@@ -150,43 +161,27 @@ GraphicsManager.prototype.preRotate = function(dir) {
   Rotates the scene to the right or left and then back to its initial position.
 */
 GraphicsManager.prototype.rotateScene = function() {
+  var animation = this.animation;
   var id = window.requestAnimationFrame(this.rotateScene.bind(this));
   this.iso.canvas.clear();
-  this.angle += this.dt;
+  animation.angle += animation.dTheta;
   this.drawBoard();
   this.drawTiles();
-  if(this.refreshCounter === refreshRate * 24) {
-    this.refreshCounter = 0;
-    this.dt = 0;
+  if(animation.refreshCounter === animation.refreshRate * 24) {
+    animation.refreshCounter = 0;
+    animation.dTheta = 0;
     window.cancelAnimationFrame(id);
   };
-  this.refreshCounter++;
+  animation.refreshCounter++;
 };
 
 /*
-  Draws the tile at the correct location (takes into account rotation angle)
+  Returns the center of the scene.
 */
-GraphicsManager.prototype.add = function(shape, translation, color) {
-  if(!translation) {
-    this.iso.add(
-      shape.rotateZ(
-        center,
-        this.angle
-      ), 
-      color
-    );
-  }
-  else {
-    this.iso.add(
-      shape.rotateZ(
-        center,
-        this.angle
-      ).translate(
-        translation.x,
-        translation.y,
-        translation.z
-      ), 
-      color
-    );
-  }
-};
+GraphicsManager.prototype.getSceneCenter = function() {
+  return Point(
+    2 * this.dimensions.squareSide + 2.5 * this.dimensions.space - this.config.translation.x, 
+    2 * this.dimensions.squareSide + 2.5 * this.dimensions.space + this.config.translation.y, 
+    this.config.translation.z
+  );
+}
