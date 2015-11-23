@@ -5,16 +5,18 @@ function Grid(xSize, ySize) {
   this.xSize = xSize;
   this.ySize = ySize;
   this.tiles = [];
+  this.maxLevel = 0;
   for(var i = 0; i < xSize; i++) {
     this.tiles[i] = [];
+    for(var j = 0; j < ySize; j++) {
+      this.insertTile(
+        new Tile(
+          { x : i, y : j },
+          Math.floor(Math.random() * 50)
+        )
+      );
+    }
   }
-};
-
-/*
-  Initializes the grid with two tiles.
-*/
-Grid.prototype.init = function() {
-  // TODO: implement initial calendar
 };
 
 /*
@@ -22,18 +24,10 @@ Grid.prototype.init = function() {
   to all tiles in the grid. The order of iteration is decided by
   the direction parameter
 */
-Grid.prototype.eachCell = function(dir, fun) {
-  if(!dir || dir < 2) {
-    for (var i = this.xSize-1; i >= 0; i--) {
-      for (var j = this.ySize-1; j >= 0; j--) {
-        fun(i, j, this.tiles[i][j]);
-      };
-    };
-  } else {
-    for (var i = 0; i < this.xSize; i++) {
-      for (var j = 0; j < this.ySize; j++) {
-        fun(i, j, this.tiles[i][j]);
-      };
+Grid.prototype.eachCell = function(fun) {
+  for (var i = this.xSize-1; i >= 0; i--) {
+    for (var j = this.ySize-1; j >= 0; j--) {
+      fun(i, j, this.tiles[i][j]);
     };
   };
 };
@@ -43,6 +37,8 @@ Grid.prototype.eachCell = function(dir, fun) {
 */
 Grid.prototype.insertTile = function(tile) {
   this.tiles[tile.x][tile.y] = tile;
+  if(tile.level > this.maxLevel)
+    this.maxLevel = tile.level;
 };
 
 /*
@@ -51,15 +47,6 @@ Grid.prototype.insertTile = function(tile) {
 Grid.prototype.removeTile = function(tile) {
   this.tiles[tile.x][tile.y] = null;
 };
-
-/*
-  Updates the position of the specified tile, without removing it from the grid.
-*/
-Grid.prototype.updateTileLevel = function(tile, newLevel) {
-  tile = this.getTile({x : tile.x, y: tile.y});
-  if(tile)
-    tile.level = newLevel;
-}
 
 Grid.prototype.isOutOfBounds = function(pos) {
   return (pos.x >= this.xSize || pos.y >= this.ySize || pos.x < 0 || pos.y < 0);

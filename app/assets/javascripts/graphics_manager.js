@@ -24,11 +24,15 @@ function GraphicsManager(grid) {
       z : 0 
     },
     boardColors : [ 
-      new Color(64, 64, 64), 
-      new Color( 0,  0,  0) 
+      new Color(128, 128, 128), 
+      new Color(200, 200, 200) 
     ],
-    colorProgression : [
-      new Color(230, 230, 230)
+    tileColors : [
+      new Color(238, 238, 238),
+      new Color(214, 230, 133),
+      new Color(140, 198, 101),
+      new Color( 68, 163,  64),
+      new Color( 30, 104,  35)
     ]
   }
   
@@ -99,18 +103,18 @@ GraphicsManager.prototype.drawBoard = function() {
             0
           ), 
           Point(
-            i * (dim.squareSide + dim.space) + dim.space + dim.squareSide,
-            j * (dim.space + dim.squareSide) + dim.space, 
+            (i + 1) * (dim.squareSide + dim.space),
+            j    *    (dim.squareSide + dim.space) + dim.space, 
             0
           ),
           Point(
-            i * (dim.squareSide + dim.space) + dim.space + dim.squareSide, 
-            j * (dim.space + dim.squareSide) + dim.space + dim.squareSide, 
+            (i + 1) * (dim.squareSide + dim.space), 
+            (j + 1) * (dim.squareSide + dim.space), 
             0
           ),
           Point(
-            i * (dim.squareSide + dim.space) + dim.space, 
-            j * (dim.space + dim.squareSide) + dim.squareSide + dim.space, 
+            i    *    (dim.squareSide + dim.space) + dim.space, 
+            (j + 1) * (dim.squareSide + dim.space), 
             0
           )
         ]),
@@ -133,7 +137,7 @@ GraphicsManager.prototype.makeTile3D = function(tile) {
     ),
     dim.squareSide, 
     dim.squareSide, 
-    Math.pow(2, tile.level) * dim.thickness
+    tile.level * dim.thickness
   );
 };
 
@@ -144,9 +148,9 @@ GraphicsManager.prototype.drawTiles = function() {
   var self = this;
   this.iso.canvas.clear();
   this.drawBoard();
-  this.grid.eachCell(null, function(x,y,tile) {
+  this.grid.eachCell(function(x, y, tile) {
     if(tile)
-      self.add(self.makeTile3D(tile), self.config.colorProgression[tile.level]);
+      self.add(self.makeTile3D(tile), self.getTileColor(tile));
   });
 };
 
@@ -184,4 +188,15 @@ GraphicsManager.prototype.getSceneCenter = function() {
     2 * this.dimensions.squareSide + 2.5 * this.dimensions.space + this.config.translation.y, 
     this.config.translation.z
   );
+}
+
+/*
+  Computes the color of the tile.
+*/
+GraphicsManager.prototype.getTileColor = function(tile) {
+  var max = this.grid.maxLevel;
+  var level = tile.level;
+  return this.config.tileColors[
+    Math.floor((1 - ((max - level) / max)) * (this.config.tileColors.length - 1))
+  ];
 }
