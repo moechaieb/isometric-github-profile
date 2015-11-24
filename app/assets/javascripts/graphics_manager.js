@@ -1,6 +1,3 @@
-window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-
 /*
   Convenient renames.
 */
@@ -36,13 +33,6 @@ function GraphicsManager(grid) {
     ]
   }
   
-  this.animation = {
-    refreshRate : 4,
-    refreshCounter : 0,
-    angle : 0,
-    dTheta : 0,
-  }
-  
   this.dimensions = {
     x : grid.xSize,
     y : grid.ySize,
@@ -55,15 +45,12 @@ function GraphicsManager(grid) {
 };
 
 /*
-  Draws the tile at the correct location (takes into account rotation angle)
+  Draws the tile at the correct location
 */
 GraphicsManager.prototype.add = function(shape, color) {
   var config = this.config;
   return this.iso.add(
-    shape.rotateZ(
-      this.getSceneCenter(),
-      this.animation.angle
-    ).translate(
+    shape.translate(
       config.translation.x,
       config.translation.y,
       config.translation.z
@@ -78,12 +65,12 @@ GraphicsManager.prototype.add = function(shape, color) {
 GraphicsManager.prototype.drawBoard = function() {
   var dim = this.dimensions;
   var config = this.config;
-  // Draw the board
+
   this.add(
     Shape.Prism(
       Point(
-        -dim.thickness,
-        -dim.thickness,
+        - dim.thickness,
+        - dim.thickness,
         0
       ), 
       dim.x * dim.squareSide + (dim.x + 1) * dim.space, 
@@ -92,7 +79,7 @@ GraphicsManager.prototype.drawBoard = function() {
     ),
     config.boardColors[1]
   );
-  // Draw the tiles
+
   for (var i = dim.x - 1; i >= 0; i--) {
     for (var j = dim.y - 1; j >= 0; j--) {
       this.add(
@@ -127,9 +114,10 @@ GraphicsManager.prototype.drawBoard = function() {
 /*
   Contructs a 3D tile representation of a tile object.
 */
-GraphicsManager.prototype.makeTile3D = function(tile) {
+GraphicsManager.prototype.make3DTile = function(tile) {
   var dim = this.dimensions;
   var config = this.config;
+
   return Shape.Prism(
     Point(
       tile.x * (dim.squareSide + dim.space) + dim.space,
@@ -137,7 +125,7 @@ GraphicsManager.prototype.makeTile3D = function(tile) {
     ),
     dim.squareSide, 
     dim.squareSide, 
-    tile.level * dim.thickness
+    (tile.level + 0.1) * dim.thickness
   );
 };
 
@@ -150,45 +138,9 @@ GraphicsManager.prototype.drawTiles = function() {
   this.drawBoard();
   this.grid.eachCell(function(x, y, tile) {
     if(tile)
-      self.add(self.makeTile3D(tile), self.getTileColor(tile));
+      self.add(self.make3DTile(tile), self.getTileColor(tile));
   });
 };
-
-/*
-  Prepares the structures before rotating the scene. Must be called before rotateScene()!
-*/
-GraphicsManager.prototype.preRotate = function(dir) {
-  this.dt = Math.PI / (refreshRate * 12);
-};
-
-/*
-  Rotates the scene to the right or left and then back to its initial position.
-*/
-GraphicsManager.prototype.rotateScene = function() {
-  var animation = this.animation;
-  var id = window.requestAnimationFrame(this.rotateScene.bind(this));
-  this.iso.canvas.clear();
-  animation.angle += animation.dTheta;
-  this.drawBoard();
-  this.drawTiles();
-  if(animation.refreshCounter === animation.refreshRate * 24) {
-    animation.refreshCounter = 0;
-    animation.dTheta = 0;
-    window.cancelAnimationFrame(id);
-  };
-  animation.refreshCounter++;
-};
-
-/*
-  Returns the center of the scene.
-*/
-GraphicsManager.prototype.getSceneCenter = function() {
-  return Point(
-    2 * this.dimensions.squareSide + 2.5 * this.dimensions.space - this.config.translation.x, 
-    2 * this.dimensions.squareSide + 2.5 * this.dimensions.space + this.config.translation.y, 
-    this.config.translation.z
-  );
-}
 
 /*
   Computes the color of the tile.
@@ -196,7 +148,8 @@ GraphicsManager.prototype.getSceneCenter = function() {
 GraphicsManager.prototype.getTileColor = function(tile) {
   var max = this.grid.maxLevel;
   var level = tile.level;
-  return this.config.tileColors[
-    Math.floor((1 - ((max - level) / max)) * (this.config.tileColors.length - 1))
+  var config = this.config;
+  return config.tileColors[
+    Math.floor((1 - ((max - level) / max)) * (config.tileColors.length - 1))
   ];
 }

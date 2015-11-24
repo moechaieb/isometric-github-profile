@@ -1,5 +1,5 @@
 /*
-  Constructs an empty 4 by 4 grid.
+  Constructs an empty x by y grid.
 */
 function Grid(xSize, ySize) {
   this.xSize = xSize;
@@ -8,59 +8,43 @@ function Grid(xSize, ySize) {
   this.maxLevel = 0;
   for(var i = 0; i < xSize; i++) {
     this.tiles[i] = [];
-    for(var j = 0; j < ySize; j++) {
-      this.insertTile(
-        new Tile(
-          { x : i, y : j },
-          Math.floor(Math.random() * 50)
-        )
-      );
-    }
-  }
+  };
+};
+
+/*
+  Constructs a new tile.
+*/
+function Tile(position, level) {
+  this.x = position.x;
+  this.y = position.y;
+  this.level = level;
 };
 
 /*
   Iterator for the tiles in the grid, applies the given function
-  to all tiles in the grid. The order of iteration is decided by
-  the direction parameter
+  to all tiles in the grid.
 */
-Grid.prototype.eachCell = function(fun) {
+Grid.prototype.eachCell = function(f) {
   for (var i = this.xSize-1; i >= 0; i--) {
     for (var j = this.ySize-1; j >= 0; j--) {
-      fun(i, j, this.tiles[i][j]);
+      f(i, j, this.tiles[i][j]);
     };
   };
 };
 
 /*
-  Inserts the tile in the grid in the correct cell
+  Generates a new tile at a position (x,y) and adds it to the grid
 */
-Grid.prototype.insertTile = function(tile) {
-  this.tiles[tile.x][tile.y] = tile;
-  if(tile.level > this.maxLevel)
-    this.maxLevel = tile.level;
+Grid.prototype.generateTile = function(x, y, level) {
+  this.tiles[x][y] = new Tile({ x : x, y : y }, level);
+  if(level > this.maxLevel)
+      this.maxLevel = level;
 };
 
 /*
-  Removes the tile from the grid, does nothing when passed null
+  Removes the tile from the grid
 */
-Grid.prototype.removeTile = function(tile) {
-  this.tiles[tile.x][tile.y] = null;
-};
-
-Grid.prototype.isOutOfBounds = function(pos) {
-  return (pos.x >= this.xSize || pos.y >= this.ySize || pos.x < 0 || pos.y < 0);
-}
-
-Grid.prototype.getTile = function(pos) {
-  if(this.isOutOfBounds(pos))
-    return false;
-  return this.tiles[pos.x][pos.y];
-}
-
-/*
-  Generates a new tile at a random position and adds it to the grid
-*/
-Grid.prototype.generateTile = function(pos, level) {
-  this.insertTile(new Tile(pos, level));
+Grid.prototype.removeTile = function(x, y) {
+  if(x >= 0 && x < this.xSize && y >= 0 && y < this.ySize)
+    this.tiles[x][y] = null;
 };

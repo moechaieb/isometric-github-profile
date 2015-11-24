@@ -14,5 +14,4 @@ Rails.application.config.assets.precompile += %w(
   isomer.min.js
   grid.js
   graphics_manager.js
-  tile.js
 )
