@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.3'
 # Use sqlite3 as the database for Active Record
@@ -24,6 +23,13 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 # Use puma as the webserver
 gem 'puma'
+# Use Mechanize for scraping
+gem 'mechanize'
+# Use pry for debugging
+gem 'pry-rails'
+gem 'pry-byebug'
+# Use Gon for JS bindings
+gem 'gon'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

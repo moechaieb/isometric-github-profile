@@ -3,8 +3,6 @@
 <%= javascript_include_tag 'graphics_manager', 'data-turbolinks-track' => true %>
 <%= javascript_include_tag 'grid', 'data-turbolinks-track' => true %>
 
-<%= calendar_data %>
-
 <div class='index-page'>
   <div class='row'>
     <%= form_tag '/new' do %>
@@ -17,7 +15,7 @@
     var debug;
     $(document).ready(function(){
       window.requestAnimationFrame(function (){
-          new Calendar(data, true);
+          new Calendar(gon.calendar, true);
       });
     });
   </script>

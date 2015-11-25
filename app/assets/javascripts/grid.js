@@ -8,8 +8,13 @@ function Grid(tile_levels, xSize, ySize) {
   this.maxLevel = 0;
   for(var i = 0; i < xSize; i++) {
     this.tiles[i] = [];
-    // TODO: generate the tiles from the tile levels
   };
+  var self = this;
+  this.eachCell(function(x,y,tile) {
+    if(tile_levels[x] && tile_levels[x][y]) {
+      self.generateTile(x,y,tile_levels[x][y]);
+    }
+  });
 };
 
 /*
