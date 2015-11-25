@@ -1,13 +1,14 @@
 /*
   Constructs an empty x by y grid.
 */
-function Grid(xSize, ySize) {
+function Grid(tile_levels, xSize, ySize) {
   this.xSize = xSize;
   this.ySize = ySize;
   this.tiles = [];
   this.maxLevel = 0;
   for(var i = 0; i < xSize; i++) {
     this.tiles[i] = [];
+    // TODO: generate the tiles from the tile levels
   };
 };
 

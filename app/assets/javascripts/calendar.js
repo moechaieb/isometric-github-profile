@@ -1,7 +1,7 @@
-function Calendar(debugMode) {
+function Calendar(grid, debugMode) {
   if(debugMode == true)
     debug = this;
-  this.grid = new Grid(52, 7);
+  this.grid = new Grid(grid, 52, 7);
   this.graphicsManager = new GraphicsManager(this.grid);
   this.graphicsManager.drawBoard();
   this.graphicsManager.drawTiles();

@@ -2,13 +2,24 @@
 <%= javascript_include_tag 'isomer.min', 'data-turbolinks-track' => true %>
 <%= javascript_include_tag 'graphics_manager', 'data-turbolinks-track' => true %>
 <%= javascript_include_tag 'grid', 'data-turbolinks-track' => true %>
+
+<script>
+  var data = <%= @calendar %>;
+</script>
+
 <div class='index-page'>
+  <div class='row'>
+    <%= form_tag '/new_calendar' do %>
+      <%= text_field_tag 'github_username', nil,  placeholder: @placeholder, class: 'offset-by-three four columns'%>
+      <%= button_tag 'Go', class: 'two columns'%>
+    <% end %>    
+  </div>
   <canvas width='1600' height='1000' id='calendar'>
   <script>
     var debug;
     $(document).ready(function(){
       window.requestAnimationFrame(function (){
-          new Calendar(true);
+          new Calendar(data, true);
       });
     });
   </script>
