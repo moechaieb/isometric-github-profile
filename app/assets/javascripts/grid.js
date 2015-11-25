@@ -1,7 +1,7 @@
 /*
   Constructs an empty x by y grid.
 */
-function Grid(xSize, ySize) {
+function Grid(tile_levels, xSize, ySize) {
   this.xSize = xSize;
   this.ySize = ySize;
   this.tiles = [];
@@ -9,6 +9,12 @@ function Grid(xSize, ySize) {
   for(var i = 0; i < xSize; i++) {
     this.tiles[i] = [];
   };
+  var self = this;
+  this.eachCell(function(x,y,tile) {
+    if(tile_levels[x] && tile_levels[x][y]) {
+      self.generateTile(x,y,tile_levels[x][y]);
+    }
+  });
 };
 
 /*

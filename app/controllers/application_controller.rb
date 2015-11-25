@@ -6,7 +6,13 @@ class ApplicationController < ActionController::Base
   include ApplicationHelper
 
   def index
-    
+    @placeholder = 'Your GitHub username'
+  end
+
+  def new
+    @placeholder = params.fetch('github_username')
+    gon.push(calendar: scrape_calendar(@placeholder))
+    render 'index'
   end
 
   def about
