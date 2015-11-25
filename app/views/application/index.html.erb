@@ -3,13 +3,11 @@
 <%= javascript_include_tag 'graphics_manager', 'data-turbolinks-track' => true %>
 <%= javascript_include_tag 'grid', 'data-turbolinks-track' => true %>
 
-<script>
-  var data = <%= @calendar %>;
-</script>
+<%= calendar_data %>
 
 <div class='index-page'>
   <div class='row'>
-    <%= form_tag '/new_calendar' do %>
+    <%= form_tag '/new' do %>
       <%= text_field_tag 'github_username', nil,  placeholder: @placeholder, class: 'offset-by-three four columns'%>
       <%= button_tag 'Go', class: 'two columns'%>
     <% end %>    
