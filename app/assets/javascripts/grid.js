@@ -10,7 +10,7 @@ function Grid(tile_levels, xSize, ySize) {
     this.tiles[i] = [];
   };
   var self = this;
-  this.eachCell(function(x,y,tile) {
+  this.eachCell(function(x, y, _) {
     if(tile_levels[x] && tile_levels[x][y]) {
       self.generateTile(x,y,tile_levels[x][y]);
     }

@@ -14,7 +14,7 @@ function GraphicsManager(grid) {
   this.grid = grid;
 
   this.config = {
-    scale : 25,
+    scale : 27,
     translation : { 
       x : -12, 
       y : 12, 
@@ -36,8 +36,8 @@ function GraphicsManager(grid) {
   this.dimensions = {
     x : grid.xSize,
     y : grid.ySize,
-    squareSide : 0.7,
-    space : 0.3,
+    squareSide : 0.8,
+    space : 0.2,
     thickness : 0.1
   }
 

@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
 
   def index
     @placeholder = 'Your GitHub username'
+    gon.push(calendar: [])
   end
 
   def new
