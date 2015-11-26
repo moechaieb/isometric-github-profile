@@ -5,7 +5,7 @@
 
 <div class='index-page'>
   <div class='row'>
-    <%= form_tag '/new' do %>
+    <%= form_tag root_path, method: :get do %>
       <%= text_field_tag 'github_username', nil,  placeholder: @placeholder, class: 'offset-by-three four columns'%>
       <%= button_tag 'Go', class: 'two columns'%>
     <% end %>    

@@ -60,7 +60,7 @@ GraphicsManager.prototype.add = function(shape, color) {
 };
 
 /*
-  Draws the board on which the tiles will move.
+  Draws the board on which the tiles will be drawn.
 */
 GraphicsManager.prototype.drawBoard = function() {
   var dim = this.dimensions;
@@ -130,15 +130,20 @@ GraphicsManager.prototype.make3DTile = function(tile) {
 };
 
 /*
-  Draws all tiles in the grid on the board.
+  Draws the 3D representation of a tile object.
+*/
+GraphicsManager.prototype.drawTile = function(tile) {
+  if(tile)
+      this.add(this.make3DTile(tile), this.getTileColor(tile));
+};
+
+/*
+  Draws all tiles in the grid.
 */
 GraphicsManager.prototype.drawTiles = function() {
   var self = this;
-  this.iso.canvas.clear();
-  this.drawBoard();
-  this.grid.eachCell(function(x, y, tile) {
-    if(tile)
-      self.add(self.make3DTile(tile), self.getTileColor(tile));
+  this.grid.eachCell(function(_, _, tile) {
+    self.drawTile(tile);
   });
 };
 
