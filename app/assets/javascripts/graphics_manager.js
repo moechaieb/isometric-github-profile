@@ -1,14 +1,8 @@
-/*
-  Convenient renames.
-*/
 var Point = Isomer.Point;
 var Path  = Isomer.Path;
 var Shape = Isomer.Shape;
 var Color = Isomer.Color;
 
-/*
-  Constucts a GraphicsManager object, wrapping an Isomer instance
-*/
 function GraphicsManager(grid) {
   this.iso = new Isomer(document.getElementById('calendar'));
   this.grid = grid;
@@ -36,17 +30,19 @@ function GraphicsManager(grid) {
   this.dimensions = {
     x : grid.xSize,
     y : grid.ySize,
-    squareSide : 0.8,
-    space : 0.2,
+    squareSide : 0.7,
+    space : 0.3,
     thickness : 0.1
   }
 
   this.iso.scale = this.config.scale;
 };
 
-/*
-  Draws the tile at the correct location
-*/
+GraphicsManager.prototype.draw = function() {
+  this.drawBoard();
+  this.drawTiles();
+}
+
 GraphicsManager.prototype.add = function(shape, color) {
   var config = this.config;
   return this.iso.add(
@@ -59,9 +55,6 @@ GraphicsManager.prototype.add = function(shape, color) {
   );
 };
 
-/*
-  Draws the board on which the tiles will be drawn.
-*/
 GraphicsManager.prototype.drawBoard = function() {
   var dim = this.dimensions;
   var config = this.config;
@@ -111,45 +104,31 @@ GraphicsManager.prototype.drawBoard = function() {
   };
 };
 
-/*
-  Contructs a 3D tile representation of a tile object.
-*/
-GraphicsManager.prototype.make3DTile = function(tile) {
+GraphicsManager.prototype.drawTile = function(tile) {
   var dim = this.dimensions;
   var config = this.config;
-
-  return Shape.Prism(
-    Point(
-      tile.x * (dim.squareSide + dim.space) + dim.space,
-      tile.y * (dim.squareSide + dim.space) + dim.space
-    ),
-    dim.squareSide, 
-    dim.squareSide, 
-    (tile.level + 0.1) * dim.thickness
-  );
-};
-
-/*
-  Draws the 3D representation of a tile object.
-*/
-GraphicsManager.prototype.drawTile = function(tile) {
   if(tile)
-      this.add(this.make3DTile(tile), this.getTileColor(tile));
+    this.add(
+      Shape.Prism(
+        Point(
+          tile.x * (dim.squareSide + dim.space) + dim.space,
+          tile.y * (dim.squareSide + dim.space) + dim.space
+        ),
+        dim.squareSide, 
+        dim.squareSide, 
+        (tile.level + 0.1) * dim.thickness
+      ), 
+      this.getTileColor(tile)
+    );
 };
 
-/*
-  Draws all tiles in the grid.
-*/
 GraphicsManager.prototype.drawTiles = function() {
   var self = this;
-  this.grid.eachCell(function(_, _, tile) {
+  this.grid.eachTile(function(_, _, tile) {
     self.drawTile(tile);
   });
 };
 
-/*
-  Computes the color of the tile.
-*/
 GraphicsManager.prototype.getTileColor = function(tile) {
   var max = this.grid.maxLevel;
   var level = tile.level;
