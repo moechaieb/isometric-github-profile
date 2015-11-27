@@ -5,10 +5,10 @@
 
 <div class='index-page'>
   <div class='row'>
-    <%= form_tag root_path, method: :get do %>
-      <%= text_field_tag 'github', nil,  placeholder: 'Your GitHub username', class: 'offset-by-three four columns' %>
-      <%= submit_tag 'Go', class: 'two columns', name: nil %>
-    <% end %>    
+  <form action='/' method='get'>
+    <input type='text' placeholder='Your GitHub username' name='github' class='offset-by-three four columns'>
+    <input type='submit' value='Go!' class='two columns'>
+  </form>
   </div>
   <% if @github.present? %>
     <p class='row offset-by-four four columns'>Here's <%= @github %>'s contributions calendar.</p>
