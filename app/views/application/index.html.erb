@@ -6,16 +6,19 @@
 <div class='index-page'>
   <div class='row'>
     <%= form_tag root_path, method: :get do %>
-      <%= text_field_tag 'github_username', nil,  placeholder: @placeholder, class: 'offset-by-three four columns'%>
+      <%= text_field_tag 'github', nil,  placeholder: 'Your GitHub username', class: 'offset-by-three four columns'%>
       <%= button_tag 'Go', class: 'two columns'%>
     <% end %>    
   </div>
+  <% if @github.present? %>
+    <p class='row offset-by-four four columns'>Here's <%= @github %>'s contributions calendar.</p>
+  <% end %>
   <canvas width='1600' height='1000' id='calendar'>
   <script>
     var debug;
     $(document).ready(function(){
       window.requestAnimationFrame(function (){
-          new Calendar(gon.calendar, true);
+        new Calendar(gon.calendar, true);
       });
     });
   </script>
