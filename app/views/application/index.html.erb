@@ -6,8 +6,8 @@
 <div class='index-page'>
   <div class='row'>
     <%= form_tag root_path, method: :get do %>
-      <%= text_field_tag 'github', nil,  placeholder: 'Your GitHub username', class: 'offset-by-three four columns'%>
-      <%= button_tag 'Go', class: 'two columns'%>
+      <%= text_field_tag 'github', nil,  placeholder: 'Your GitHub username', class: 'offset-by-three four columns' %>
+      <%= submit_tag 'Go', class: 'two columns', name: nil %>
     <% end %>    
   </div>
   <% if @github.present? %>
