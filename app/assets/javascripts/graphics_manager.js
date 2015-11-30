@@ -15,8 +15,8 @@ function GraphicsManager(grid) {
       z : 0 
     },
     boardColors : [ 
-      new Color(128, 128, 128), 
-      new Color(200, 200, 200) 
+      new Color(180, 180, 180),
+      new Color(210, 210, 210) 
     ],
     tileColors : [
       new Color(214, 230, 133),
