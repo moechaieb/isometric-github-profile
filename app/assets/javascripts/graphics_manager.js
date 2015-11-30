@@ -19,7 +19,6 @@ function GraphicsManager(grid) {
       new Color(200, 200, 200) 
     ],
     tileColors : [
-      new Color(238, 238, 238),
       new Color(214, 230, 133),
       new Color(140, 198, 101),
       new Color( 68, 163,  64),
