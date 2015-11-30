@@ -2,4 +2,4 @@
 
 Your GitHub public contributions calendar in isometric 3D.
 
-![](http://i.imgur.com/W8qrQ7C.png)
+![](http://i.imgur.com/Z3q5LLe.png)
