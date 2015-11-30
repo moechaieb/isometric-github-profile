@@ -8,7 +8,7 @@ function GraphicsManager(grid) {
   this.grid = grid;
 
   this.config = {
-    scale : 27,
+    scale : 20,
     translation : { 
       x : -12, 
       y : 12, 

@@ -5,15 +5,15 @@
 
 <div class='index-page'>
   <div class='row'>
-  <form action='/' method='get'>
-    <input type='text' placeholder='Your GitHub username' name='github' class='offset-by-three four columns'>
-    <input type='submit' value='Go!' class='two columns'>
-  </form>
+    <form action='/' method='get'>
+      <input type='text' placeholder='Your GitHub username' name='github' class='offset-by-three four columns'>
+      <input type='submit' value='Go!' class='two columns'>
+    </form>
   </div>
   <% if @github.present? %>
-    <p class='row offset-by-four four columns'>Here's <%= @github %>'s contributions calendar.</p>
+    <p class='row offset-by-four four columns'>Here's <strong><%= @github %> </strong> 's public contributions calendar.</p>
   <% end %>
-  <canvas width='1600' height='1000' id='calendar'>
+  <canvas width='1200' height='750' id='calendar'>
   <script>
     var debug;
     $(document).ready(function(){

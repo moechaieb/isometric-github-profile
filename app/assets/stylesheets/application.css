@@ -11,7 +11,7 @@
 .title {
   text-align: center;
   color: #1EAEDB;
-  font-size: 4em;
+  font-size: 3em;
 }
 
 .header {
@@ -23,15 +23,25 @@
 
 .footer {
   display: block;
-  height: 30px;
-  line-height: 30px;
+  height: 35px;
+  line-height: 35px;
   border-top: 1px solid #ddd;
   margin-top: 25px;
+}
+
+.header iframe {
+  display: block;
+  margin: 0 auto;
 }
 
 #calendar {
   display: block;
   margin: 0 auto;
-  width: 800px;
-  height: 500px;
+  width: 600px;
+  height: 375px;
+}
+
+strong {
+  font-weight: bold;
+  color: #1EAEDB;
 }
