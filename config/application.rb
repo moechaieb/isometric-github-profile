@@ -22,5 +22,9 @@ module IsometricGithubProfile
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    # Setup Rack middleware for Google Analytics injection
+    config.middleware.use Rack::GoogleAnalytics, tracker: 'UA-70896703-1'
+
   end
 end
