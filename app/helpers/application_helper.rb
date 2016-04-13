@@ -8,14 +8,14 @@ module ApplicationHelper
 
     agent = Mechanize.new
     profile = agent.get "https://github.com/users/#{github_username}/contributions" rescue {}
-    
+
     return calendar if profile.nil? || profile == {}
     return calendar unless profile.code.to_i == 200
-    
+
     profile.search('g').map do |elem|
       return nil if elem.nil?
-      svgs = elem.children.select {|c| c.name == 'rect'}
-      svgs.map {|s| s['data-count'].to_i}
+
+      elem.children.select {|c| c.name == 'rect'}.map {|s| s['data-count'].to_i}
     end.compact
   end
 end

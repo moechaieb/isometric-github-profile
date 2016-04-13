@@ -7,6 +7,6 @@ class ApplicationController < ActionController::Base
 
   def index
     @github = params['github']
-    gon.push calendar: @github.nil? ? [] : scrape_calendar(@github)
+    gon.push(calendar: @github.nil? ? [] : scrape_calendar(@github))
   end
 end
