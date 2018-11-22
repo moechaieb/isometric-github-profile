@@ -1,6 +1,6 @@
 module ApplicationHelper
   def my_website
-    link_to 'Mohamed Adam Chaieb', 'http://moes.website'
+    link_to 'Mohamed Adam Chaieb', 'https://moechaieb.github.io'
   end
 
   def scrape_calendar(github_username)
