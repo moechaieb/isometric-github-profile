@@ -1,4 +1,4 @@
-# [isometric-github-profile](https://isometric-github-profile.herokuapp.com/)
+# [isometric-github-profile](https://isometric-github-calendar.herokuapp.com)
 
 Your GitHub public contributions calendar in isometric 3D.
 
